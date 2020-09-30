@@ -1,4 +1,4 @@
-![](E:\myOftenUse\myworkSpace\blogDemo\docker-notes\docker.jpg)
+![](./images/docker.jpg)
 
 ### 概述
 
@@ -116,15 +116,122 @@ Server: Docker Engine - Community
 
 #### 帮助命令
 
+1. `docker version` 查看docker的版本信息
+2. `docker info` docker的详细信息，包括容器数、镜像数、镜像地址等等
+3. `docker [命令] --help` 查看某个命令的帮助文档
+
 #### 镜像命令
+
+> `docker search 镜像名` 搜索某个镜像  
+
+![](./images/search.png)
+
+> `docker pull 镜像名` 从远程拉取某个镜像
+
+![](./images/1601430937024.png)
+
+> `docker images` 列出所有已经下载到本地的镜像信息
+
+![](./images/images.png)
+
+> `docker rmi name|ID` 删除某个镜像
+
+![](./images/rmi.png)
+
+> 批量删除镜像
+
+```shell
+# 传值删除
+docker rmi $(docker images -q)
+
+# 利用管道符删除
+docker images -q | xargs docker rmi
+```
+
+> `docker commit -m"镜像描述" -a"作者" containerID imageName:tag` 提交某个容器为镜像
+
+![](./images/commit.png)
+
+> `docker history 镜像id` 查看镜像的历史文件层信息
+
+![](./images/history.png)
 
 #### 容器命令
 
+> `docker run [options] image` 指定镜像，启动一个容器
 
+```shell
+# options 常用参数说明
+--name name # 指定容器的名字，当有多个镜像时方便区分
+-it # 以交互的方式启动容器，启动后打开容器内的终端
+-d # 在后台运行容器
+-p 宿主机Port:容器Port # 小写p映射指定端口到容器开放的端口上
+-P # 大写的P随机指定主机的映射端口
+```
 
-### 镜像
+![](./images/run.png)
+
+> 停止或启动容器
+
+```shell
+docker start 容器ID # 启动停止中的容器
+docker restart 容器ID # 重启容器
+docker stop 容器ID # 终止容器
+docker kill 容器ID # 强行终止容器
+docker pause 容器ID # 暂停容器
+docker unpause 容器ID # 启动暂定的容器
+```
+
+> 查看容器
+
+```shell
+docker ps # 查看所有正在运行的容器
+docker ps -a # 查看所有容器包括历史容器
+docker ps -q # 只列出容器ID 可以跟-a一起使用 
+docker ps -n=number # 列数最近启动的前number个容器
+```
+
+![](./images/ps.png)
+
+> `docker diff 容器ID` 查看容器变化
+
+![](./images/diff.png)
+
+> 删除容器
+
+```shell
+docker rm -f 容器ID # 删除单个容器
+docker rm -f $(docker ps -aq) # 删除所有容器包括历史容器，去掉-a只删除所有运行中的容器
+docker ps -aq | xargs docker rm -f # 通过管道符删除容器跟上面的作用一样
+```
+
+> `docker top 容器ID` 查看容器中的进程信息
+
+![](./images/top.png)
+
+> 进入容器
+
+```shell
+docker exec -it 容器ID 默认命令行 # 进入容器并打开新的命令行
+docker attach 容器ID # 进入容器并聚焦到正在运行的终端
+```
+
+> 退出容器
+
+```shell
+exit # 退出并停止容器
+Ctrl + p + q # 退出不停止容器 
+```
+
+#### 其他命令
+
+1. `docker logs -f -t --tail number 容器ID` 查看容器内的前number条日志
+2. `docker inspect 容器ID|镜像ID` 查看容器或镜像的元数据
+3. `docker cp 容器ID:容器内路径 主机路径` 拷贝容器内的文件到宿主机
 
 ### 容器卷
+
+
 
 ### `Dockerfile`
 
